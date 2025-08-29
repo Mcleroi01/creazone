@@ -21,7 +21,6 @@ export const HomePage: React.FC = () => {
   const latestPosts = posts.slice(0, 3)
 
   const texts = {
-    fr: {
       hero: {
         title: 'Explorations Numériques',
         subtitle: 'Découvrez des articles variés sur la tech, la science, la culture et plus encore',
@@ -60,116 +59,24 @@ export const HomePage: React.FC = () => {
           ]
         }
       }
-    },
-    en: {
-      hero: {
-        title: 'Digital Explorations',
-        subtitle: 'Discover articles on tech, science, culture, and more',
-        cta: 'Explore Articles'
-      },
-      sections: {
-        latest: 'Latest Articles',
-        categories: 'Categories',
-        viewAll: 'View All Articles',
-        blog: {
-          title: 'Latest Publications',
-          description: 'Our articles on various technological and cultural topics',
-          cta: 'Read blog'
-        },
-        tutorials: {
-          title: 'Tutorials',
-          description: 'Step-by-step guides to learn modern technologies',
-          cta: 'View tutorials'
-        },
-        features: {
-          title: 'Why Choose Us',
-          description: 'Discover what makes us different',
-          items: [
-            {
-              title: 'Diverse Content',
-              description: 'Articles on tech, science, culture, and more'
-            },
-            {
-              title: 'Regular Updates',
-              description: 'Fresh content every week'
-            },
-            {
-              title: 'Engaged Community',
-              description: 'Join our community of curious readers'
-            }
-          ]
-        }
-      }
-    },
-    pt: {
-      hero: {
-        title: 'Explorações Digitais',
-        subtitle: 'Descubra artigos sobre tecnologia, ciência, cultura e muito mais',
-        cta: 'Explorar Artigos'
-      },
-      sections: {
-        latest: 'Últimos Artigos',
-        categories: 'Categorias',
-        viewAll: 'Ver Todos os Artigos',
-        blog: {
-          title: 'Últimas Publicações',
-          description: 'Nossos artigos sobre diversos tópicos tecnológicos e culturais',
-          cta: 'Ler blog'
-        },
-        tutorials: {
-          title: 'Tutoriais',
-          description: 'Guias práticos para aprender tecnologias modernas',
-          cta: 'Ver tutoriais'
-        },
-        features: {
-          title: 'Por que nos escolher',
-          description: 'Descubra o que nos torna diferentes',
-          items: [
-            {
-              title: 'Conteúdo Diversificado',
-              description: 'Artigos sobre tecnologia, ciência, cultura e muito mais'
-            },
-            {
-              title: 'Atualizações Regulares',
-              description: 'Conteúdo novo toda semana'
-            },
-            {
-              title: 'Comunidade Engajada',
-              description: 'Junte-se à nossa comunidade de leitores curiosos'
-            }
-          ]
-        }
-      }
-    }
+    
   }
 
   const features = [
     {
       icon: BookOpen,
-      title: { fr: 'Contenu Varié', en: 'Diverse Content', pt: 'Conteúdo Diversificado' },
-      description: { 
-        fr: 'Découvrez des articles sur la tech, la science, la culture et plus encore',
-        en: 'Discover articles on tech, science, culture, and more',
-        pt: 'Descubra artigos sobre tecnologia, ciência, cultura e muito mais'
-      }
+      title: 'Contenu Varié',
+      description: 'Découvrez des articles sur la tech, la science, la culture et plus encore'
     },
     {
       icon: Code,
-      title: { fr: 'Technologies Modernes', en: 'Modern Technologies', pt: 'Tecnologias Modernas' },
-      description: { 
-        fr: 'Restez à jour avec les dernières avancées technologiques',
-        en: 'Stay up-to-date with the latest technological advancements',
-        pt: 'Fique por dentro das últimas novidades tecnológicas'
-      }
+      title: 'Technologies Modernes',
+      description: 'Restez à jour avec les dernières avancées technologiques'
     },
     {
       icon: Users2,
-      title: { fr: 'Communauté Engagée', en: 'Engaged Community', pt: 'Comunidade Engajada' },
-      description: { 
-        fr: 'Échangez avec une communauté de lecteurs passionnés',
-        en: 'Connect with a community of passionate readers',
-        pt: 'Conecte-se com uma comunidade de leitores apaixonados'
-      }
+      title: 'Communauté Engagée',
+      description: 'Échangez avec une communauté de lecteurs passionnés'
     }
   ]
 
@@ -210,8 +117,8 @@ export const HomePage: React.FC = () => {
   return (
     <div className="overflow-x-hidden">
       <SEO 
-        title={texts[language].hero.title}
-        description={texts[language].hero.subtitle}
+        title={texts.hero.title}
+        description={texts.hero.subtitle}
       />
 
       {/* Hero Section */}
@@ -229,18 +136,18 @@ export const HomePage: React.FC = () => {
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
-                {texts[language].hero.title}
+                {texts.hero.title}
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-              {texts[language].hero.subtitle}
+              {texts.hero.subtitle}
             </p>
             <div className="mt-8">
               <Link
                 to="/blog"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg animate-gradient"
               >
-                {texts[language].hero.cta}
+                {texts.hero.cta}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </div>
@@ -262,10 +169,10 @@ export const HomePage: React.FC = () => {
                   <feature.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
-                  {feature.title[language]}
+                  {feature.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  {feature.description[language]}
+                  {feature.description}
                 </p>
                 <div className="mt-4 text-blue-600 dark:text-blue-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-sm font-medium">En savoir plus</span>
@@ -288,10 +195,10 @@ export const HomePage: React.FC = () => {
             className="text-center mb-16"
           >
             <span className="text-sm font-semibold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
-              {texts[language].sections.categories}
+              Catégories
             </span>
             <h2 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl lg:text-5xl">
-              {language === 'fr' ? 'Explorez nos catégories' : language === 'en' ? 'Explore our categories' : 'Explore nossas categorias'}
+              Explorez nos catégories
             </h2>
             <div className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto mt-4 rounded-full"></div>
           </motion.div>
@@ -323,7 +230,7 @@ export const HomePage: React.FC = () => {
                   </div>
                   <div className="mt-6 flex items-center text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">
                     <span className="text-sm font-medium">
-                      {language === 'fr' ? 'Explorer' : language === 'en' ? 'Explore' : 'Explorar'}
+                      Explorer
                     </span>
                     <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -339,15 +246,15 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="text-sm font-semibold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
-              {texts[language].sections.features.title}
+              {texts.sections.features.title}
             </span>
             <h2 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
-              {texts[language].sections.features.description}
+              {texts.sections.features.description}
             </h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            {texts[language].sections.features.items.map((feature, index) => (
+            {texts.sections.features.items.map((feature, index) => (
               <motion.div 
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -387,16 +294,16 @@ export const HomePage: React.FC = () => {
               </div>
               <div className="p-8">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                  {texts[language].sections.blog.title}
+                  {texts.sections.blog.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  {texts[language].sections.blog.description}
+                  {texts.sections.blog.description}
                 </p>
                 <Link 
                   to="/blog" 
                   className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
                 >
-                  {texts[language].sections.blog.cta}
+                  {texts.sections.blog.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </div>
@@ -414,16 +321,16 @@ export const HomePage: React.FC = () => {
               </div>
               <div className="p-8">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                  {texts[language].sections.tutorials.title}
+                  {texts.sections.tutorials.title}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  {texts[language].sections.tutorials.description}
+                  {texts.sections.tutorials.description}
                 </p>
                 <Link 
                   to="/tutorials" 
                   className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
                 >
-                  {texts[language].sections.tutorials.cta}
+                  {texts.sections.tutorials.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </div>
@@ -444,7 +351,7 @@ export const HomePage: React.FC = () => {
           >
             <div>
               <span className="text-sm font-semibold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
-                {texts[language].sections.latest}
+                {texts.sections.latest}
               </span>
               <h2 className="mt-2 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
                 {language === 'fr' ? 'Nos derniers articles' : language === 'en' ? 'Our latest articles' : 'Nossos artigos mais recentes'}
@@ -454,7 +361,7 @@ export const HomePage: React.FC = () => {
               to="/blog"
               className="mt-6 md:mt-0 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg"
             >
-              {texts[language].sections.viewAll}
+              {texts.sections.viewAll}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </motion.div>
