@@ -6,6 +6,7 @@ import { PostCard } from '../components/PostCard'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { SEO } from '../components/SEO'
+import { AdPlacement } from '../components/ads/AdPlacement'
 
 export const CategoryPage: React.FC = () => {
   const { category } = useParams<{ category: string }>()
@@ -52,6 +53,11 @@ export const CategoryPage: React.FC = () => {
         title={texts[language].title(category)}
         description={texts[language].description(category)}
       />
+      
+      {/* Bannière publicitaire en haut de la page */}
+      <div className="mb-10">
+        <AdPlacement type="banner" />
+      </div>
 
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4 capitalize">
@@ -76,11 +82,22 @@ export const CategoryPage: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <>
+          {/* Bannière publicitaire dans le flux */}
+          <div className="mb-10">
+            <AdPlacement type="in-feed" />
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
-        </div>
+          </div>
+          
+          {/* Bannière publicitaire en bas de page */}
+          <div className="mt-12">
+            <AdPlacement type="banner" />
+          </div>
+        </>
       )}
     </div>
   )

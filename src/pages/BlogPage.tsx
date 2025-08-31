@@ -5,6 +5,7 @@ import { usePosts } from '../hooks/usePosts';
 import { PostSkeleton } from '../components/PostSkeleton';
 import { ErrorMessage } from '../components/ErrorMessage';
 import { SEO } from '../components/SEO';
+import { AdPlacement } from '../components/ads/AdPlacement';
 
 export const BlogPage: React.FC = () => {
   const { setLanguage } = useApp();
@@ -58,6 +59,10 @@ export const BlogPage: React.FC = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Bannière publicitaire en haut de la page */}
+        <div className="mb-10">
+          <AdPlacement type="banner" />
+        </div>
         <div className="flex justify-between items-center mb-8">
           <div className="relative">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -76,7 +81,12 @@ export const BlogPage: React.FC = () => {
         {loading ? (
           <PostSkeleton count={6} />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <>
+            {/* Bannière publicitaire avant la liste des articles */}
+            <div className="mb-10">
+              <AdPlacement type="in-feed" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts.map((post, index) => (
               <motion.article
                 key={post.id}
@@ -135,8 +145,14 @@ export const BlogPage: React.FC = () => {
                 />
               </motion.article>
             ))}
-          </div>
+            </div>
+          </>
         )}
+        
+        {/* Bannière publicitaire en bas de la page */}
+        <div className="mt-12">
+          <AdPlacement type="banner" />
+        </div>
       </div>
     </div>
   );

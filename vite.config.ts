@@ -4,6 +4,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/',
   plugins: [react()],
   server: {
     port: 3001,
@@ -19,5 +20,17 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          vendor: ['@supabase/supabase-js'],
+        },
+      },
+    },
   },
 });

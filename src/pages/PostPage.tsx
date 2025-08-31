@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Share2, MessageCircle, Clock, Heart, Bookmark, Tag } from 'lucide-react';
+import { ArrowLeft, Share2, MessageCircle, Heart, Bookmark, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { usePost } from '../hooks/usePosts';
+import { AdPlacement } from '../components/ads/AdPlacement';
+import { useVisitorTracking } from '../hooks/useVisitorTracking';
 import { SEO } from '../components/SEO';
 import { Tag as TagType, Language } from '../lib/supabase';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -13,19 +15,6 @@ import { Avatar } from '../components/ui/avatar';
 import { Button } from '../components/ui/button';
 import { Skeleton } from '../components/ui/skeleton';
 
-
-// Composant pour afficher le temps de lecture
-const ReadingTime = ({ content }: { content: string }) => {
-  const words = content.trim().split(/\s+/).length;
-  const minutes = Math.ceil(words / 200); // 200 mots par minute
-  
-  return (
-    <div className="flex items-center text-sm text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full">
-      <Clock className="mr-1.5 h-4 w-4" />
-      <span>{minutes} min de lecture</span>
-    </div>
-  );
-};
 
 // Composant pour les boutons de partage
 type ShareButtonProps = {
@@ -160,6 +149,9 @@ export const PostPage: React.FC = () => {
   const { post, loading, error } = usePost(slug || '', language);
   const [isMounted, setIsMounted] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
+
+  // Suivi des visiteurs
+  useVisitorTracking(post?.id);
 
   useEffect(() => {
     setIsMounted(true);
@@ -416,6 +408,11 @@ const texts: Record<Language, Texts[keyof Texts]> = {
           {texts[language].backToBlog}
         </Link>
 
+        {/* Bannière publicitaire en haut de l'article */}
+        <div className="mb-8">
+          <AdPlacement type="banner" />
+        </div>
+
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <div className="flex items-center space-x-2">
             <Avatar 
@@ -450,6 +447,8 @@ const texts: Record<Language, Texts[keyof Texts]> = {
             <ShareButtons title={post.title} url={currentUrl} />
           </div>
         </div>
+
+
 
         {post.cover_image_url && (
           <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
@@ -502,7 +501,11 @@ const texts: Record<Language, Texts[keyof Texts]> = {
         </div>
       </div>
 
-      <article className="prose prose-lg dark:prose-invert max-w-none mb-12">
+      <article className="prose prose-lg dark:prose-invert max-w-none mb-12 relative">
+        {/* Publicité flottante sur le côté pour les grands écrans */}
+        <div className="hidden lg:block fixed left-4 top-1/2 transform -translate-y-1/2 w-48">
+          <AdPlacement type="rectangle" />
+        </div>
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
@@ -590,6 +593,10 @@ const texts: Record<Language, Texts[keyof Texts]> = {
         >
           {post.content}
         </ReactMarkdown>
+        {/* Bannière publicitaire avant la section auteur */}
+        <div className="my-12">
+          <AdPlacement type="in-feed" />
+        </div>
       </article>
 
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-6 mb-12 shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
@@ -630,65 +637,15 @@ const texts: Record<Language, Texts[keyof Texts]> = {
         </div>
       </div>
 
-      {/* Articles similaires
-      {post.related_posts && post.related_posts.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
-            {texts[language].relatedPosts}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {post.related_posts.map((relatedPost) => (
-              <div key={relatedPost.id} className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                {relatedPost.cover_image_url && (
-                  <div className="h-48 overflow-hidden">
-                    <img
-                      src={relatedPost.cover_image_url}
-                      alt={relatedPost.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                )}
-                <div className="p-4">
-                  <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-2">
-                    <span>{formatPostDate(relatedPost.published_at)}</span>
-                    <span className="mx-2">•</span>
-                    <span>{calculateReadingTime(relatedPost.content)} {texts[language].readingTime}</span>
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white line-clamp-2">
-                    {relatedPost.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-4">
-                    {relatedPost.excerpt}
-                  </p>
-                  <Link
-                    to={`/blog/${relatedPost.slug}`}
-                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
-                  >
-                    {texts[language].readMore}
-                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 text-center">
-            <Link
-              to="/blog"
-              className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:underline font-medium"
-            >
-              {texts[language].allPosts}
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      )} */}
-
+      {/* Bannière publicitaire avant les commentaires */}
+     
+      
       {/* Section de commentaires */}
       <CommentSection postId={post.id} language={language} />
+      {/* Bannière publicitaire après l'introduction */}
+      <div className="my-8">
+        <AdPlacement type="rectangle" />
+      </div>
     </div>
   )
 }

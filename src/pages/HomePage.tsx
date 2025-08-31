@@ -7,11 +7,16 @@ import { PostCard } from '../components/PostCard'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import { SEO } from '../components/SEO'
 import { motion, useAnimation, useInView } from 'framer-motion'
+import { AdPlacement } from '../components/ads/AdPlacement'
+import { useVisitorTracking } from '../hooks/useVisitorTracking'
 
 export const HomePage: React.FC = () => {
   const { language } = useApp()
   const { posts, loading } = usePosts(language)
   const { categories } = useCategories(language)
+  
+  // Suivi des visiteurs pour la page d'accueil
+  useVisitorTracking()
 
 
   console.log("Posts:", posts)
@@ -19,6 +24,9 @@ export const HomePage: React.FC = () => {
   
   // Prendre les 3 derniers articles
   const latestPosts = posts.slice(0, 3)
+  
+  // Vérifier si le contenu est suffisant pour les publicités
+  // La variable a été supprimée car elle n'était pas utilisée
 
   const texts = {
       hero: {
@@ -342,6 +350,10 @@ export const HomePage: React.FC = () => {
       {/* Latest Posts Section */}
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Bannière publicitaire en haut de la section */}
+          <div className="mb-10">
+            <AdPlacement type="banner" />
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -390,6 +402,11 @@ export const HomePage: React.FC = () => {
               ))}
             </motion.div>
           )}
+          
+          {/* Bannière publicitaire en bas de la section */}
+          <div className="mt-12">
+            <AdPlacement type="in-feed" />
+          </div>
         </div>
       </section>
     </div>
