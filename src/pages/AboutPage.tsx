@@ -43,6 +43,9 @@ const staggerContainer: Variants = {
 
 export const AboutPage = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const pageTitle = "À propos - CréaZone";
+  const pageDescription = "Découvrez l'équipe et la mission de CréaZone. Notre engagement pour vous fournir les meilleurs tutoriels et ressources pour vos projets créatifs.";
+  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
 
   useEffect(() => {
     setIsMounted(true);
@@ -51,10 +54,27 @@ export const AboutPage = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <SEO 
-        title="À propos - Votre Blog" 
-        description="Découvrez qui nous sommes et ce qui nous motive à partager nos connaissances avec vous."
+        title={pageTitle}
+        description={pageDescription}
+        type="website"
+        canonicalUrl={pageUrl}
+        meta={[
+          // Open Graph / Facebook
+          { property: 'og:title', content: pageTitle },
+          { property: 'og:description', content: pageDescription },
+          { property: 'og:url', content: pageUrl },
+          { property: 'og:type', content: 'website' },
+          
+          // Twitter Card
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:title', content: pageTitle },
+          { name: 'twitter:description', content: pageDescription },
+          
+          // Autres balises
+          { name: 'keywords', content: 'à propos, équipe, mission, valeurs, créazone, histoire, philosophie' }
+        ]}
       />
       
       {/* Hero Section */}

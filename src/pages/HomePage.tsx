@@ -122,11 +122,32 @@ export const HomePage: React.FC = () => {
     }
   }
 
+  const pageTitle = "CréaZone - Apprendre et Maîtriser de Nouvelles Compétences";
+  const pageDescription = "Découvrez les derniers articles et tutoriels sur CréaZone. Apprenez et maîtrisez de nouvelles compétences en développement, design et plus encore.";
+  const pageUrl = window.location.href;
+
   return (
-    <div className="overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <SEO 
-        title={texts.hero.title}
-        description={texts.hero.subtitle}
+        title={pageTitle}
+        description={pageDescription}
+        type="website"
+        canonicalUrl={pageUrl}
+        meta={[
+          // Open Graph / Facebook
+          { property: 'og:title', content: pageTitle },
+          { property: 'og:description', content: pageDescription },
+          { property: 'og:url', content: pageUrl },
+          { property: 'og:site_name', content: 'CréaZone' },
+          
+          // Twitter Card
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:title', content: pageTitle },
+          { name: 'twitter:description', content: pageDescription },
+          
+          // Autres balises
+          { name: 'keywords', content: 'tutoriels, développement, design, compétences, apprentissage, créativité, programmation' }
+        ]}
       />
 
       {/* Hero Section */}

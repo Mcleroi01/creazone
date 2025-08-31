@@ -17,9 +17,13 @@ export const BlogPage: React.FC = () => {
   
   const { posts, loading, error } = usePosts('fr');
 
+  const pageTitle = 'Tous les Articles - CréaZone';
+  const pageDescription = 'Découvrez tous nos articles et tutoriels sur le développement web, la création de contenu et les nouvelles technologies.';
+  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+  
   const texts = {
     title: 'Tous les Articles',
-    description: 'Découvrez tous nos articles et tutoriels',
+    description: pageDescription,
     count: (count: number) => `${count} article${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`
   };
 
@@ -30,8 +34,25 @@ export const BlogPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <SEO 
-        title={texts.title} 
-        description={texts.description} 
+        title={pageTitle}
+        description={pageDescription}
+        type="website"
+        canonicalUrl={pageUrl}
+        meta={[
+          // Open Graph / Facebook
+          { property: 'og:title', content: pageTitle },
+          { property: 'og:description', content: pageDescription },
+          { property: 'og:url', content: pageUrl },
+          { property: 'og:type', content: 'website' },
+          
+          // Twitter Card
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:title', content: pageTitle },
+          { name: 'twitter:description', content: pageDescription },
+          
+          // Autres balises
+          { name: 'keywords', content: 'blog, articles, tutoriels, développement web, création de contenu, technologies' }
+        ]}
       />
       
       {/* Hero Section */}
