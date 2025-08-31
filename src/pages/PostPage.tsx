@@ -397,6 +397,27 @@ const texts: Record<Language, Texts[keyof Texts]> = {
         description={post.excerpt}
         type="article"
         image={post.cover_image_url}
+        canonicalUrl={window.location.href}
+        meta={[
+          // Open Graph / Facebook
+          { property: 'og:type', content: 'article' },
+          { property: 'og:title', content: post.title },
+          { property: 'og:description', content: post.excerpt || '' },
+          { property: 'og:image', content: post.cover_image_url || '' },
+          { property: 'og:url', content: window.location.href },
+          { property: 'og:site_name', content: 'CréaZone' },
+          
+          // Twitter Card
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:title', content: post.title },
+          { name: 'twitter:description', content: post.excerpt || '' },
+          { name: 'twitter:image', content: post.cover_image_url || '' },
+          
+          // Article specific
+          { property: 'article:published_time', content: post.published_at || '' },
+          { property: 'article:author', content: post.author?.display_name || '' },
+          ...(post.tags?.map(tag => ({ property: 'article:tag', content: tag.name })) || [])
+        ]}
       />
 
       <div className="mb-8">
