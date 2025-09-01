@@ -429,10 +429,7 @@ const texts: Record<Language, Texts[keyof Texts]> = {
           {texts[language].backToBlog}
         </Link>
 
-        {/* Bannière publicitaire en haut de l'article */}
-        <div className="mb-8">
-          <AdPlacement type="banner" />
-        </div>
+       
 
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <div className="flex items-center space-x-2">

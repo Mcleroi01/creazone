@@ -54,10 +54,7 @@ export const CategoryPage: React.FC = () => {
         description={texts[language].description(category)}
       />
       
-      {/* Bannière publicitaire en haut de la page */}
-      <div className="mb-10">
-        <AdPlacement type="banner" />
-      </div>
+     
 
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4 capitalize">
@@ -83,10 +80,7 @@ export const CategoryPage: React.FC = () => {
         </div>
       ) : (
         <>
-          {/* Bannière publicitaire dans le flux */}
-          <div className="mb-10">
-            <AdPlacement type="in-feed" />
-          </div>
+          
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />

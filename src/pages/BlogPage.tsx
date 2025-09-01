@@ -103,10 +103,7 @@ export const BlogPage: React.FC = () => {
           <PostSkeleton count={6} />
         ) : (
           <>
-            {/* Bannière publicitaire avant la liste des articles */}
-            <div className="mb-10">
-              <AdPlacement type="in-feed" />
-            </div>
+           
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts.map((post, index) => (
               <motion.article
