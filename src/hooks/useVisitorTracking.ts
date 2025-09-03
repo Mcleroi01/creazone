@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 
 export const useVisitorTracking = (postId?: string) => {
+  const [viewCount, setViewCount] = useState<number>(0);
   const location = useLocation();
   const startTimeRef = useRef<Date>();
   const visitorIdRef = useRef<string>();
@@ -48,33 +49,46 @@ export const useVisitorTracking = (postId?: string) => {
     const startTracking = async () => {
       startTimeRef.current = new Date();
       
-      // Vérifier si c'est un visiteur de retour
-      const { data: existingVisits, error: visitError } = await supabase
-        .from('page_views')
-        .select('id')
-        .eq('visitor_id', visitorIdRef.current)
-        .eq('path', location.pathname);
+      // Vérifier si ce visiteur a déjà vu cet article
+    const { data: existingVisit, error: visitError } = await supabase
+      .from('page_views')
+      .select('id')
+      .eq('visitor_id', visitorIdRef.current)
+      .eq('post_id', postId)
+      .maybeSingle();
 
-      if (visitError) {
-        console.error('Error checking existing visit:', visitError);
-        return;
-      }
-      
-      const isReturningVisitor = (existingVisits?.length || 0) > 0;
+    if (visitError) {
+      console.error('Error checking existing visit:', visitError);
+      return;
+    }
+    
+    // Si le visiteur a déjà vu cet article, on ne fait rien
+    if (existingVisit) {
+      return;
+    }
 
-      // Enregistrer la vue de la page
-      const { data, error } = await supabase
-        .from('page_views')
-        .insert({
-          visitor_id: visitorIdRef.current,
-          url: window.location.href,
-          path: location.pathname,
-          post_id: postId || null,
-          view_started_at: startTimeRef.current.toISOString(),
-          is_returning_visitor: isReturningVisitor,
-        })
-        .select()
-        .single();
+    // Vérifier si c'est un visiteur de retour (a déjà visité d'autres pages)
+    const { data: otherVisits } = await supabase
+      .from('page_views')
+      .select('id')
+      .eq('visitor_id', visitorIdRef.current)
+      .neq('post_id', postId);
+    
+    const isReturningVisitor = (otherVisits?.length || 0) > 0;
+
+    // Enregistrer la vue de la page
+    const { data, error } = await supabase
+      .from('page_views')
+      .insert({
+        visitor_id: visitorIdRef.current,
+        url: window.location.href,
+        path: location.pathname,
+        post_id: postId || null,
+        view_started_at: startTimeRef.current.toISOString(),
+        is_returning_visitor: isReturningVisitor,
+      })
+      .select()
+      .single();
 
       if (error) {
         console.error('Error tracking page view:', error);
@@ -120,5 +134,29 @@ export const useVisitorTracking = (postId?: string) => {
     startTracking();
   }, [location.pathname, postId]);
 
-  return null;
+  // Get unique view count for a post (counts each visitor only once)
+  const getPostViewCount = useCallback(async (postId: string): Promise<number> => {
+    if (!postId) return 0;
+    
+    const { count, error } = await supabase
+      .from('page_views')
+      .select('visitor_id', { count: 'exact', head: true })
+      .eq('post_id', postId);
+      
+    if (error) {
+      console.error('Error fetching view count:', error);
+      return 0;
+    }
+    
+    return count || 0;
+  }, []);
+
+  // Update view count when postId changes
+  useEffect(() => {
+    if (postId) {
+      getPostViewCount(postId).then(count => setViewCount(count));
+    }
+  }, [postId, getPostViewCount]);
+
+  return { viewCount, getPostViewCount };
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useSearchParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Share2, MessageCircle, Heart, Bookmark, Tag } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -147,6 +147,8 @@ export const PostPage: React.FC = () => {
     (searchParams.get('lang') as Language) || 'fr'
   );
   const { post, loading, error } = usePost(slug || '', language);
+  const location = useLocation();
+  const { viewCount } = useVisitorTracking(post?.id);
   const [isMounted, setIsMounted] = useState(false);
   const [currentUrl, setCurrentUrl] = useState('');
 
@@ -619,7 +621,7 @@ const texts: Record<Language, Texts[keyof Texts]> = {
 
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl p-6 mb-12 shadow-sm border border-gray-100 dark:border-gray-800 transition-all hover:shadow-md">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-start space-x-4">
             <div className="relative">
               <Avatar 
                 src={post.author?.avatar_url} 
@@ -633,12 +635,23 @@ const texts: Record<Language, Texts[keyof Texts]> = {
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
                 {post.author?.display_name || 'Auteur inconnu'}
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">
                 {post.author?.bio || 'Auteur de cet article'}
               </p>
+             
             </div>
           </div>
           <div className="flex items-center space-x-3">
+             <div className="flex items-center space-x-4 mt-2">
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <span className="font-medium">{new Intl.NumberFormat('fr-FR').format(viewCount)}</span>
+                  <span className="ml-1">vues</span>
+                </div>
+              </div>
             <Button 
               variant="outline" 
               size="sm" 
